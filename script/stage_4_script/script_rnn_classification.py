@@ -29,7 +29,7 @@ if 1:
     RESULT_DIR = os.path.join(PROJECT_ROOT, 'result', 'stage_4_result') + os.sep
     os.makedirs(RESULT_DIR, exist_ok=True)
 
-    MODEL_TYPE = 'rnn'   # 'rnn', 'lstm', 'gru' に変えて3回実行する！
+    MODEL_TYPE = 'gru'   # 'lstm' → 'gru'（CPUで高速・高精度）に変更
     EXPERIMENT_NAME = f'classification_{MODEL_TYPE}'
     # ------------------------------------------------------
 
@@ -40,15 +40,16 @@ if 1:
 
     method_obj = Method_RNN_Classification(f'{MODEL_TYPE} classification', '')
     method_obj.rnn_type = MODEL_TYPE
-    method_obj.hidden_dim = 128
-    method_obj.num_layers = 1
-    method_obj.bidirectional = False
+    method_obj.hidden_dim = 64         # 128 → 64（双方向なので実質128次元で十分高精度）
+    method_obj.num_layers = 1          # 2 → 1（CPU負荷を半減）
+    method_obj.bidirectional = True    # 双方向は維持！
     method_obj.dropout = 0.3
     method_obj.loss_name = 'cross_entropy'
     method_obj.optimizer_name = 'adam'
-    method_obj.learning_rate = 1e-3
-    method_obj.batch_size = 64
-    method_obj.max_epoch = 10
+    method_obj.learning_rate = 2e-3    # 収束を早めるため 2e-3 に変更
+    method_obj.weight_decay = 1e-4
+    method_obj.batch_size = 128        # 64 → 128（CPUでの処理回数を半減）
+    method_obj.max_epoch = 6
     method_obj.device_name = 'auto'
 
     result_obj = Result_Saver('saver', '')
