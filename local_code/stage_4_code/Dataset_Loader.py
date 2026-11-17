@@ -16,7 +16,7 @@ class Dataset_Loader(dataset):
     dataset_source_file_name = None   # 'text_classification'
     glove_folder_name = 'glove.2024.wikigiga.50d'
     embedding_dim = 50
-    max_len = 200
+    max_len = 250
     max_vocab_size = 20000
 
     def __init__(self, dName=None, dDescription=None):
